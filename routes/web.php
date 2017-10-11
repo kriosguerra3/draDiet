@@ -25,3 +25,5 @@ Route::resource('assessments', 'AssessmentController');
 Route::resource('exercises', 'ExerciseController');
 
 Route::resource('foods', 'FoodController');
+
+Route::resource('habits', 'HabitController');

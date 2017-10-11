@@ -10,3 +10,7 @@
     <a href="{!! route('foods.index') !!}"><i class="fa fa-edit"></i><span>Foods</span></a>
 </li>
 
+<li class="{{ Request::is('habits*') ? 'active' : '' }}">
+    <a href="{!! route('habits.index') !!}"><i class="fa fa-edit"></i><span>Habits</span></a>
+</li>
+
