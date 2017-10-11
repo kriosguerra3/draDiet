@@ -30,3 +30,7 @@
     <a href="{!! route('roles.index') !!}"><i class="fa fa-edit"></i><span>Roles</span></a>
 </li>
 
+<li class="{{ Request::is('schedules*') ? 'active' : '' }}">
+    <a href="{!! route('schedules.index') !!}"><i class="fa fa-edit"></i><span>Schedules</span></a>
+</li>
+
