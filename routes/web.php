@@ -23,3 +23,5 @@ Route::get('/home', 'HomeController@index');
 Route::resource('assessments', 'AssessmentController');
 
 Route::resource('exercises', 'ExerciseController');
+
+Route::resource('foods', 'FoodController');
