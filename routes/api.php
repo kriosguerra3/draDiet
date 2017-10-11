@@ -37,3 +37,5 @@ Route::resource('roles', 'RoleAPIController');
 Route::resource('schedules', 'ScheduleAPIController');
 
 Route::resource('supplements', 'SupplementAPIController');
+
+Route::resource('visits', 'VisitAPIController');

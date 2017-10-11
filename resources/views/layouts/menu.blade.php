@@ -38,3 +38,7 @@
     <a href="{!! route('supplements.index') !!}"><i class="fa fa-edit"></i><span>Supplements</span></a>
 </li>
 
+<li class="{{ Request::is('visits*') ? 'active' : '' }}">
+    <a href="{!! route('visits.index') !!}"><i class="fa fa-edit"></i><span>Visits</span></a>
+</li>
+
