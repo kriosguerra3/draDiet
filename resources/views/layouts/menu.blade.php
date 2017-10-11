@@ -18,3 +18,7 @@
     <a href="{!! route('illnesses.index') !!}"><i class="fa fa-edit"></i><span>Illnesses</span></a>
 </li>
 
+<li class="{{ Request::is('medications*') ? 'active' : '' }}">
+    <a href="{!! route('medications.index') !!}"><i class="fa fa-edit"></i><span>Medications</span></a>
+</li>
+

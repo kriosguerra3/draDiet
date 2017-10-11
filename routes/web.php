@@ -29,3 +29,5 @@ Route::resource('foods', 'FoodController');
 Route::resource('habits', 'HabitController');
 
 Route::resource('illnesses', 'IllnessController');
+
+Route::resource('medications', 'MedicationController');
