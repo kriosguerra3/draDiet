@@ -34,3 +34,7 @@
     <a href="{!! route('schedules.index') !!}"><i class="fa fa-edit"></i><span>Schedules</span></a>
 </li>
 
+<li class="{{ Request::is('supplements*') ? 'active' : '' }}">
+    <a href="{!! route('supplements.index') !!}"><i class="fa fa-edit"></i><span>Supplements</span></a>
+</li>
+

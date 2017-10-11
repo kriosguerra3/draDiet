@@ -37,3 +37,5 @@ Route::resource('patients', 'PatientController');
 Route::resource('roles', 'RoleController');
 
 Route::resource('schedules', 'ScheduleController');
+
+Route::resource('supplements', 'SupplementController');
