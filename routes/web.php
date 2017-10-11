@@ -31,3 +31,5 @@ Route::resource('habits', 'HabitController');
 Route::resource('illnesses', 'IllnessController');
 
 Route::resource('medications', 'MedicationController');
+
+Route::resource('patients', 'PatientController');

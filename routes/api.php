@@ -29,3 +29,5 @@ Route::resource('habits', 'HabitAPIController');
 Route::resource('illnesses', 'IllnessAPIController');
 
 Route::resource('medications', 'MedicationAPIController');
+
+Route::resource('patients', 'PatientAPIController');
