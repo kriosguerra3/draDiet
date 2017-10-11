@@ -25,3 +25,5 @@ Route::resource('exercises', 'ExerciseAPIController');
 Route::resource('foods', 'FoodAPIController');
 
 Route::resource('habits', 'HabitAPIController');
+
+Route::resource('illnesses', 'IllnessAPIController');

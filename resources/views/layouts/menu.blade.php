@@ -14,3 +14,7 @@
     <a href="{!! route('habits.index') !!}"><i class="fa fa-edit"></i><span>Habits</span></a>
 </li>
 
+<li class="{{ Request::is('illnesses*') ? 'active' : '' }}">
+    <a href="{!! route('illnesses.index') !!}"><i class="fa fa-edit"></i><span>Illnesses</span></a>
+</li>
+
