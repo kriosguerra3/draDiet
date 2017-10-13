@@ -47,6 +47,20 @@ class Habit extends Model
     public static $rules = [
         
     ];
+        
+    
+    public function medications(){
+        return $this->belongsToMany('App\Models\Medication');
+    }
+    
+    public function supplements(){
+        return $this->belongsToMany('App\Models\Supplement');
+    }
+    
+    public function visits()
+    {
+        return $this->morphToMany('App\Models\Visit', 'visitable');
+    }
 
     
 }

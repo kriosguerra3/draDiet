@@ -47,6 +47,11 @@ class Exercise extends Model
     public static $rules = [
         
     ];
+    
+    public function visits()
+    {
+        return $this->morphToMany('App\Models\Visit', 'visitable');
+    }
 
     
 }

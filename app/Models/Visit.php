@@ -53,6 +53,22 @@ class Visit extends Model
     public static $rules = [
         
     ];
+    
+    public function assessments(){
+        return $this->belongsToMany('App\Models\Assessment')->withPivot('value');
+    }
+    
+    public function schedules(){
+        return $this->belongsToMany('App\Models\Schedule')->withPivot('time');
+    }
+    
+    public function medications(){
+        return $this->belongsToMany('App\Models\Medication');
+    }
+    
+    public function supplements(){
+        return $this->belongsToMany('App\Models\Supplement');
+    }
 
     
 }

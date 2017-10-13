@@ -50,6 +50,10 @@ class Supplement extends Model
     public static $rules = [
         
     ];
+    
+    public function illnesses(){
+        return $this->belongsToMany('App\Models\Illness');
+    }
 
     
 }
