@@ -52,7 +52,7 @@ class Supplement extends Model
     ];
     
     public function illnesses(){
-        return $this->belongsToMany('App\Models\Illness');
+        return $this->belongsToMany('App\Models\Illness')->withPivot('dose');
     }
 
     

@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
+use App\Models\Illness;
+use App\Models\Habit;
+use App\Models\Exercise;
 
 class PatientController extends AppBaseController
 {
@@ -43,7 +46,14 @@ class PatientController extends AppBaseController
      */
     public function create()
     {
-        return view('patients.create');
+        //Mandamos todos los registros de hábitos, enfermedades, etc.
+        $exercises= Exercise::all()->sortBy("name");        
+        $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();
+        $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
+        $habits= Habit::all()->sortBy("name");
+        
+        
+        return view('patients.create',compact('general_illnesses','female_illnesses','habits','exercises'));
     }
 
     /**
