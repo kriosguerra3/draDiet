@@ -1,4 +1,8 @@
-@extends('layouts.app') @section('content')
+@extends('layouts.app') 
+@section('css')
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css">
+@stop
+@section('content')
 <section class="content-header">
 	<h1>Registro de Nuevo Paciente</h1>
 </section>
@@ -88,6 +92,8 @@
 </div>
 @endsection
 
+
 @section('views_scripts')
     <script src="/js/views_scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 @stop

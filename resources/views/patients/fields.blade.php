@@ -1,10 +1,3 @@
-<script>
-$( document ).ready(function() {
-	alert(1);
-});
-</script>
-
-
 <!-- Name Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('name', 'Nombres:') !!}
@@ -29,15 +22,15 @@ $( document ).ready(function() {
 
 <!-- Birthdate Field -->
 <div class="form-group col-sm-6">
-	{!! Form::label('birthdate', 'Fecha de Nacimiento:') !!} {!!
-	Form::date('birthdate', null, ['class' => 'form-control']) !!}
-
-	<div class="input-group date" data-provide="datepicker">
-		<input type="text" class="form-control">
-		<div class="input-group-addon">
-			<span class="glyphicon glyphicon-th"></span>
-		</div>
-	</div>
+	{!! Form::label('birthdate', 'Fecha de Nacimiento:') !!} 
+	
+	<div class="input-group date">
+      <div class="input-group-addon">
+        <i class="fa fa-calendar"></i>
+      </div>
+      <input type="text" class="form-control pull-right" id="datepicker">
+    </div>
+                                	
 
 </div>
 
