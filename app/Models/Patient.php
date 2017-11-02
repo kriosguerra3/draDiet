@@ -25,9 +25,14 @@ class Patient extends Model
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
-
-    protected $dates = ['deleted_at'];
+    
+    
+    protected $dates = [
+        'birthdate',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
 
     public $fillable = [
@@ -53,6 +58,7 @@ class Patient extends Model
         'phone_number' => 'string',
         'user_id' => 'integer'
     ];
+    
 
     /**
      * Validation rules
@@ -62,6 +68,10 @@ class Patient extends Model
     public static $rules = [
         
     ];
+    
+    public function age() {
+        return $this->birthdate->diffInYears(\Carbon\Carbon::now());
+    }
 
     
 }

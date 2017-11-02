@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePatientRequest;
 use App\Repositories\PatientRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
@@ -66,6 +67,11 @@ class PatientController extends AppBaseController
     public function store(CreatePatientRequest $request)
     {
         $input = $request->all();
+        
+        dd($input);
+        
+        //Rewriting the birthdate into Carbon Format
+        $input['birthdate'] =  Carbon::createFromFormat('d/m/Y',  $input['birthdate']);        
 
         $patient = $this->patientRepository->create($input);
 
@@ -83,6 +89,7 @@ class PatientController extends AppBaseController
      */
     public function show($id)
     {
+        
         $patient = $this->patientRepository->findWithoutFail($id);
 
         if (empty($patient)) {

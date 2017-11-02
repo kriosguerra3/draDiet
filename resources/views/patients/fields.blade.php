@@ -23,15 +23,12 @@
 <!-- Birthdate Field -->
 <div class="form-group col-sm-6">
 	{!! Form::label('birthdate', 'Fecha de Nacimiento:') !!} 
-	
 	<div class="input-group date">
       <div class="input-group-addon">
         <i class="fa fa-calendar"></i>
       </div>
-      <input type="text" class="form-control pull-right" id="datepicker">
+      <input type="text" id="birthdate" name="birthdate" class="datepicker form-control pull-right">
     </div>
-                                	
-
 </div>
 
 <!-- Phone Number Field -->
@@ -39,5 +36,4 @@
     {!! Form::label('phone_number', 'Teléfono') !!}
     {!! Form::text('phone_number', null, ['class' => 'form-control']) !!}
 </div>
-
 
