@@ -46,3 +46,7 @@
     <a href="{!! route('malaises.index') !!}"><i class="fa fa-edit"></i><span>Malaises</span></a>
 </li>
 
+<li class="{{ Request::is('recommendations*') ? 'active' : '' }}">
+    <a href="{!! route('recommendations.index') !!}"><i class="fa fa-edit"></i><span>Recommendations</span></a>
+</li>
+
