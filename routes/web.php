@@ -45,3 +45,5 @@ Route::resource('visits', 'VisitController');
 Route::resource('malaises', 'MalaiseController');
 
 Route::resource('recommendations', 'RecommendationController');
+
+Route::resource('tests', 'TestController');
