@@ -11,9 +11,10 @@ use Carbon\Carbon;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
+use App\Models\Patient;
 use App\Models\Illness;
 use App\Models\Habit;
-use App\Models\Exercise;
+
 
 class PatientController extends AppBaseController
 {
@@ -47,12 +48,11 @@ class PatientController extends AppBaseController
      */
     public function create()
     {
-        //Mandamos todos los registros de hábitos, enfermedades, etc.
-        $exercises= Exercise::all()->sortBy("name");        
+        //Mandamos todos los registros de hábitos, enfermedades, etc.              
         $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();
         $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
-        $habits= Habit::all()->sortBy("name");
-        
+        $habits= Habit::where('type', '=',NULL)->orderBy("name")->get();
+        $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();
         
         return view('patients.create',compact('general_illnesses','female_illnesses','habits','exercises'));
     }
@@ -66,14 +66,18 @@ class PatientController extends AppBaseController
      */
     public function store(CreatePatientRequest $request)
     {
-        $input = $request->all();
-        
-        dd($input);
-        
+        //We separate the inputs to store them properly
+        $input_patient = $request->except('illnesses','habits');                
+        $input_illnesses = $request->get('illnesses');
+        $input_habits = $request->get('habits');
+       
         //Rewriting the birthdate into Carbon Format
-        $input['birthdate'] =  Carbon::createFromFormat('d/m/Y',  $input['birthdate']);        
-
-        $patient = $this->patientRepository->create($input);
+        $input_patient['birthdate'] =  Carbon::createFromFormat('d/m/Y',  $input_patient['birthdate']);        
+        
+        //Saving data into each table
+        $patient = $this->patientRepository->create($input_patient);
+        $patient->illnesses()->sync($input_illnesses);
+        $patient->habit()->sync($input_habits);
 
         Flash::success('Patient saved successfully.');
 
@@ -110,15 +114,26 @@ class PatientController extends AppBaseController
      */
     public function edit($id)
     {
-        $patient = $this->patientRepository->findWithoutFail($id);
-
+          
+        //Mandamos todos los registros de hábitos, enfermedades, etc.
+        $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
+        $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();        
+        $habits= Habit::where('type', '=',NULL)->orderBy("name")->get();
+        $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();     
+        
+        $patient = $this->patientRepository->findWithoutFail($id);        
+        //Mandamos todos los registros de hábitos, enfermedades, etc.
+        $patient['illnesses'] =  $patient->illnesses()->get();        
+        $patient['habits'] = $patient->habits()->get();
+        
+        
         if (empty($patient)) {
             Flash::error('Patient not found');
 
             return redirect(route('patients.index'));
         }
 
-        return view('patients.edit')->with('patient', $patient);
+        return view('patients.edit', compact('patient','general_illnesses','female_illnesses','habits','exercises'));
     }
 
     /**

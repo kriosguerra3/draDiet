@@ -41,7 +41,19 @@ class Patient extends Model
         'gender',
         'birthdate',
         'phone_number',
-        'user_id'
+        'user_id',
+        'email',
+        'schedule_wakes_up',
+        'schedule_breakfast',
+        'schedule_snack_am',
+        'schedule_lunch',
+        'schedule_snack_pm',
+        'schedule_dinner',
+        'schedule_sleeps',
+        'other_snacks',
+        'takes_turns',
+        'travels_frequently',
+        'indications'        
     ];
 
     /**
@@ -71,6 +83,14 @@ class Patient extends Model
     
     public function age() {
         return $this->birthdate->diffInYears(\Carbon\Carbon::now());
+    }
+    
+    public function illnesses() {
+        return $this->belongsToMany('\App\Models\Illness');
+    }
+    
+    public function habits() {
+        return $this->belongsToMany('\App\Models\Habit');
     }
 
     
