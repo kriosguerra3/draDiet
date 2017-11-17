@@ -6,6 +6,7 @@ use App\Http\Requests\CreatePatientRequest;
 use App\Http\Requests\UpdatePatientRequest;
 use App\Repositories\PatientRepository;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Flash;
@@ -52,7 +53,7 @@ class PatientController extends AppBaseController
         $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();
         $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
         $habits= Habit::where('type', '=',NULL)->orderBy("name")->get();
-        $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();
+        $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();       
         
         return view('patients.create',compact('general_illnesses','female_illnesses','habits','exercises'));
     }
@@ -118,12 +119,12 @@ class PatientController extends AppBaseController
         //Mandamos todos los registros de hábitos, enfermedades, etc.
         $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
         $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();        
-        $habits= Habit::where('type', '=',NULL)->orderBy("name")->get();
+        $habits = Habit::where('type', '=', NULL)->orderBy("name")->get();
         $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();     
         
         $patient = $this->patientRepository->findWithoutFail($id);        
         //Mandamos todos los registros de hábitos, enfermedades, etc.
-        $patient['illnesses'] =  $patient->illnesses()->get();        
+        $patient['illnesses'] =  $patient->illnesses()->get(); 
         $patient['habits'] = $patient->habits()->get();
         
         
