@@ -27,7 +27,7 @@
       <div class="input-group-addon">
         <i class="fa fa-calendar"></i>
       </div>
-      <input type="text" id="birthdate" name="birthdate" class="datepicker form-control pull-right" value="{{ old('phone_number') }}">
+      <input type="text" id="birthdate" name="birthdate" class="datepicker form-control pull-right" value="{{ $patient['birthdate']->format('d/m/Y') }}">
     </div>
 </div>
 

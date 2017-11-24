@@ -121,14 +121,18 @@ class PatientController extends AppBaseController
         $habits = Habit::where('type', '=', NULL)->orderBy("name")->get();
         $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();     
         
-        $patient = $this->patientRepository->findWithoutFail($id);        
+        $patient = $this->patientRepository->findWithoutFail($id);   
+        
+        $patient['birthdate']->format('d-m-Y');        
+        
+        //dd($patient['birthdate']->format('d-m-Y'));
+
         //Mandamos todos los registros de hábitos, enfermedades, etc.
         $patient['illnesses'] =  $patient->illnesses()->get(); 
         $patient['habits'] = $patient->habits()->get();                
         
         if (empty($patient)) {
             Flash::error('Patient not found');
-
             return redirect(route('patients.index'));
         }
 
