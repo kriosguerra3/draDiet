@@ -71,14 +71,13 @@ class PatientController extends AppBaseController
         $input_patient = $request->except('illnesses','habits');                
         $input_illnesses = $request->get('illnesses');
         $input_habits = $request->get('habits');
-       
+        
         //Rewriting the birthdate into Carbon Format
         $input_patient['birthdate'] =  Carbon::createFromFormat('d/m/Y',  $input_patient['birthdate']);        
-        
         //Saving data into each table
         $patient = $this->patientRepository->create($input_patient);
         $patient->illnesses()->sync($input_illnesses);
-        $patient->habit()->sync($input_habits);
+        $patient->habits()->sync($input_habits);
 
         Flash::success('Patient saved successfully.');
 
@@ -125,8 +124,7 @@ class PatientController extends AppBaseController
         $patient = $this->patientRepository->findWithoutFail($id);        
         //Mandamos todos los registros de hábitos, enfermedades, etc.
         $patient['illnesses'] =  $patient->illnesses()->get(); 
-        $patient['habits'] = $patient->habits()->get();
-        
+        $patient['habits'] = $patient->habits()->get();                
         
         if (empty($patient)) {
             Flash::error('Patient not found');
@@ -146,19 +144,29 @@ class PatientController extends AppBaseController
      * @return Response
      */
     public function update($id, UpdatePatientRequest $request)
-    {
-        $patient = $this->patientRepository->findWithoutFail($id);
+    {        
+        $patient = $this->patientRepository->findWithoutFail($id);       
 
         if (empty($patient)) {
             Flash::error('Patient not found');
-
             return redirect(route('patients.index'));
         }
-
+        
+        //Rewriting the birthdate into Carbon Format
+        $request['birthdate'] =  Carbon::createFromFormat('d/m/Y', $request['birthdate']);        
         $patient = $this->patientRepository->update($request->all(), $id);
+        
+        //Detaching illnesses in case there's none when updating        
+        if($request->get('illnesses') === null){
+            $patient->illnesses()->detach();            
+        }  
 
+        //Detaching habits in case there's none when updating
+        if($request->get('habits') === null){
+            $patient->habits()->detach();
+        }                       
+        
         Flash::success('Patient updated successfully.');
-
         return redirect(route('patients.index'));
     }
 
@@ -180,9 +188,7 @@ class PatientController extends AppBaseController
         }
 
         $this->patientRepository->delete($id);
-
         Flash::success('Patient deleted successfully.');
-
         return redirect(route('patients.index'));
     }
 }

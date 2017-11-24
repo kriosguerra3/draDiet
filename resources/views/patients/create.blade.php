@@ -17,19 +17,12 @@
 				</div>
 				<div class="box-body">@include('patients.fields')</div>
 			</div>
-			
 		</div>
-		
-
-
-      
-
 		{!! Form::close() !!}
 
 	</div>
 </div>
 @endsection
-
 
 @section('views_scripts')
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
@@ -38,12 +31,7 @@
         	$('.datepicker').datepicker({
         	    format: 'dd/mm/yyyy',
         	    orientation:'bottom'        	    
-        	});
-        	
+        	});        	
         });
-
-        
-
-       
 	</script>    
 @stop

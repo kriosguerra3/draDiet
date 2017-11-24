@@ -94,7 +94,7 @@
 					<div class="form-group col-sm-6">
 						{{-- If para validar si estamos editando o creando un paciente--}}
     					@if (Route::currentRouteName() == "patients.edit" )
-    						{!! Form::checkbox('habits[]', $habit->id, $patient['illnesses']->contains($habit->id) ? true: false  , array('class'=>'form-check-label'));!!}
+    						{!! Form::checkbox('habits[]', $habit->id, $patient['habits']->contains($habit->id) ? true: false  , array('class'=>'form-check-label'));!!}
     					@else
     						{!! Form::checkbox('habits[]', $habit->id, false, array('class'=>'form-check-input'));!!}
     					@endif						
@@ -115,7 +115,7 @@
 				@foreach($exercises as $habit)
 				<div class="form-group col-sm-6">
 					@if (Route::currentRouteName() == "patients.edit" )
-						{!! Form::checkbox('habits[]', $habit->id, $patient['illnesses']->contains($habit->id) ? true: false  , array('class'=>'form-check-label'));!!}
+						{!! Form::checkbox('habits[]', $habit->id, $patient['habits']->contains($habit->id) ? true: false  , array('class'=>'form-check-label'));!!}
 					@else
 						{!! Form::checkbox('habits[]', $habit->id, false, array('class'=>'form-check-input'));!!}
 					@endif	
