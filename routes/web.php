@@ -24,6 +24,9 @@ Route::resource('assessments', 'AssessmentController');
 
 Route::resource('exercises', 'ExerciseController');
 
+//Food catalog in Json format
+//Route::get('foods/catalog',array('as'=>'catalog','uses'=>'FoodController@catalog'));
+
 Route::resource('foods', 'FoodController');
 
 Route::resource('habits', 'HabitController');
@@ -47,3 +50,8 @@ Route::resource('malaises', 'MalaiseController');
 Route::resource('recommendations', 'RecommendationController');
 
 Route::resource('tests', 'TestController');
+
+
+
+
+

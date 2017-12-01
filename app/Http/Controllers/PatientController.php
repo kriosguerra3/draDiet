@@ -13,8 +13,10 @@ use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
 use App\Models\Patient;
+use App\Models\Food;
 use App\Models\Illness;
 use App\Models\Habit;
+use App\Models\Medication;
 
 
 class PatientController extends AppBaseController
@@ -49,13 +51,16 @@ class PatientController extends AppBaseController
      */
     public function create()
     {
+                
         //Mandamos todos los registros de hábitos, enfermedades, etc.              
         $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();
         $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
         $habits= Habit::where('type', '=',NULL)->orderBy("name")->get();
-        $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();       
+        $exercises = Habit::where('type', '=','exercise')->orderBy("name")->get();  
+        $foods = Food::orderBy("name")->get();
+        $medications = Medication::orderBy("name")->get();
         
-        return view('patients.create',compact('general_illnesses','female_illnesses','habits','exercises'));
+        return view('patients.create',compact('general_illnesses','female_illnesses','habits','exercises','foods','medications'));
     }
 
     /**
@@ -67,10 +72,15 @@ class PatientController extends AppBaseController
      */
     public function store(CreatePatientRequest $request)
     {
+        
+        
+        
         //We separate the inputs to store them properly
-        $input_patient = $request->except('illnesses','habits');                
+        $input_patient = $request->except('illnesses','habits','food_allergies','medication_allergies');                
         $input_illnesses = $request->get('illnesses');
         $input_habits = $request->get('habits');
+        $input_food_allergies= $request->get('food_allergies');
+        $input_medication_allergies= $request->get('medication_allergies');                       
         
         //Rewriting the birthdate into Carbon Format
         $input_patient['birthdate'] =  Carbon::createFromFormat('d/m/Y',  $input_patient['birthdate']);        
@@ -78,7 +88,23 @@ class PatientController extends AppBaseController
         $patient = $this->patientRepository->create($input_patient);
         $patient->illnesses()->sync($input_illnesses);
         $patient->habits()->sync($input_habits);
-
+        
+        
+        //Saving the food patient is allergic to
+        foreach ($input_food_allergies as $allergen){
+            $food = Food::find($allergen);
+            $food->allergies()->create(['patient_id' => $patient->id]);            
+        }
+        
+        //Saving the medication patient is allergic to
+        foreach ($input_medication_allergies as $allergen){
+            $medication = Medication::find($allergen);
+            $medication->allergies()->create(['patient_id' => $patient->id]);
+        }
+        
+       
+        
+        
         Flash::success('Patient saved successfully.');
 
         return redirect(route('patients.index'));
@@ -119,24 +145,26 @@ class PatientController extends AppBaseController
         $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
         $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();        
         $habits = Habit::where('type', '=', NULL)->orderBy("name")->get();
-        $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();     
+        $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();
+        $foods = Food::orderBy("name")->get(); 
+        $medications = Medication::orderBy("name")->get();
+        
         
         $patient = $this->patientRepository->findWithoutFail($id);   
         
         $patient['birthdate']->format('d-m-Y');        
-        
-        //dd($patient['birthdate']->format('d-m-Y'));
 
         //Mandamos todos los registros de hábitos, enfermedades, etc.
         $patient['illnesses'] =  $patient->illnesses()->get(); 
-        $patient['habits'] = $patient->habits()->get();                
+        $patient['habits'] = $patient->habits()->get();
+        $patient['foods'] = $patient->foods()->get();
         
         if (empty($patient)) {
             Flash::error('Patient not found');
             return redirect(route('patients.index'));
         }
 
-        return view('patients.edit', compact('patient','general_illnesses','female_illnesses','habits','exercises'));
+        return view('patients.edit', compact('patient','general_illnesses','female_illnesses','habits','exercises','foods','medications'));
     }
 
     /**
@@ -168,7 +196,12 @@ class PatientController extends AppBaseController
         //Detaching habits in case there's none when updating
         if($request->get('habits') === null){
             $patient->habits()->detach();
-        }                       
+        }
+        
+        //Detaching foods in case there's none when updating
+        if($request->get('foods') === null){
+            $patient->foods()->detach();
+        }      
         
         Flash::success('Patient updated successfully.');
         return redirect(route('patients.index'));

@@ -92,6 +92,10 @@ class Patient extends Model
     public function habits() {
         return $this->belongsToMany('\App\Models\Habit');
     }
+    
+    public function foods() {
+        return $this->belongsToMany('\App\Models\Food');
+    }
 
     
 }

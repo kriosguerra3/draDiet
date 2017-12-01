@@ -152,4 +152,16 @@ class FoodController extends AppBaseController
 
         return redirect(route('foods.index'));
     }
+    
+    /**
+     * Retrieves all the foods from the Database in json format
+     * @return Response
+     */
+    /*public function catalog()
+    {       
+        $foods = $this->foodRepository->orderBy('name')->all();                      
+        return json_encode($foods);    
+    }
+    */
+    
 }
