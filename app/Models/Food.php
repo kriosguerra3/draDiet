@@ -51,12 +51,7 @@ class Food extends Model
     public function visits()
     {
         return $this->morphMany('\App\Models\Visit', 'visitable');
-    }
-    
-    public function allergies()
-    {
-        return $this->morphMany('\App\Models\Allergy', 'allergiable');
-    }
+    }        
 
     
 }

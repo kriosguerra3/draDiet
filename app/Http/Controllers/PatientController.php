@@ -71,10 +71,7 @@ class PatientController extends AppBaseController
      * @return Response
      */
     public function store(CreatePatientRequest $request)
-    {
-        
-        
-        
+    {        
         //We separate the inputs to store them properly
         $input_patient = $request->except('illnesses','habits','food_allergies','medication_allergies');                
         $input_illnesses = $request->get('illnesses');
@@ -88,22 +85,8 @@ class PatientController extends AppBaseController
         $patient = $this->patientRepository->create($input_patient);
         $patient->illnesses()->sync($input_illnesses);
         $patient->habits()->sync($input_habits);
-        
-        
-        //Saving the food patient is allergic to
-        foreach ($input_food_allergies as $allergen){
-            $food = Food::find($allergen);
-            $food->allergies()->create(['patient_id' => $patient->id]);            
-        }
-        
-        //Saving the medication patient is allergic to
-        foreach ($input_medication_allergies as $allergen){
-            $medication = Medication::find($allergen);
-            $medication->allergies()->create(['patient_id' => $patient->id]);
-        }
-        
-       
-        
+        $patient->food_allergies()->sync($input_food_allergies);
+        $patient->medication_allergies()->sync($input_medication_allergies);
         
         Flash::success('Patient saved successfully.');
 
@@ -147,8 +130,7 @@ class PatientController extends AppBaseController
         $habits = Habit::where('type', '=', NULL)->orderBy("name")->get();
         $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();
         $foods = Food::orderBy("name")->get(); 
-        $medications = Medication::orderBy("name")->get();
-        
+        $medications = Medication::orderBy("name")->get();        
         
         $patient = $this->patientRepository->findWithoutFail($id);   
         
@@ -158,6 +140,8 @@ class PatientController extends AppBaseController
         $patient['illnesses'] =  $patient->illnesses()->get(); 
         $patient['habits'] = $patient->habits()->get();
         $patient['foods'] = $patient->foods()->get();
+        $patient['food_allergies'] = $patient->food_allergies()->get();
+        $patient['medication_allergies'] = $patient->medication_allergies()->get();
         
         if (empty($patient)) {
             Flash::error('Patient not found');
@@ -178,16 +162,28 @@ class PatientController extends AppBaseController
     public function update($id, UpdatePatientRequest $request)
     {        
         $patient = $this->patientRepository->findWithoutFail($id);       
-
+        
         if (empty($patient)) {
             Flash::error('Patient not found');
             return redirect(route('patients.index'));
-        }
+        }                
         
         //Rewriting the birthdate into Carbon Format
-        $request['birthdate'] =  Carbon::createFromFormat('d/m/Y', $request['birthdate']);        
-        $patient = $this->patientRepository->update($request->all(), $id);
+        $request['birthdate'] =  Carbon::createFromFormat('d/m/Y', $request['birthdate']);  
         
+       
+        //Rewriting the times intoMYSQL time format
+        /*
+        $request['schedule_wakes_up'] = date("G:i", strtotime($request['schedule_wakes_up']));
+        $request['schedule_breakfast'] = date("G:i", strtotime($request['schedule_breakfast']));
+        $request['schedule_snack_am'] = date("G:i", strtotime($request['schedule_snack_am']));
+        $request['schedule_lunch'] = date("G:i", strtotime($request['schedule_lunch']));
+        $request['schedule_snack_pm'] = date("G:i", strtotime($request['schedule_snack_pm']));
+        $request['schedule_dinner'] = date("G:i", strtotime($request['schedule_dinner']));
+        $request['schedule_sleeps'] = date("G:i", strtotime($request['schedule_sleeps']));
+        */
+        
+        $patient = $this->patientRepository->update($request->all(), $id);
         //Detaching illnesses in case there's none when updating        
         if($request->get('illnesses') === null){
             $patient->illnesses()->detach();            
@@ -201,7 +197,17 @@ class PatientController extends AppBaseController
         //Detaching foods in case there's none when updating
         if($request->get('foods') === null){
             $patient->foods()->detach();
-        }      
+        }       
+       
+        //Detaching food_allergies in case there's none when updating
+        if($request->get('food_allergies') === null){              
+            $patient->food_allergies()->detach();
+        } 
+        
+        //Detaching medication_allergies in case there's none when updating
+        if($request->get('medication_allergies') === null){
+            $patient->medication_allergies()->detach();
+        } 
         
         Flash::success('Patient updated successfully.');
         return redirect(route('patients.index'));

@@ -1,7 +1,4 @@
 @extends('layouts.app')
-@section('css')
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css">
-@stop
 @section('content')
     <section class="content-header">
         <h1>

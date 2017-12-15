@@ -31,7 +31,7 @@ class Patient extends Model
         'birthdate',
         'created_at',
         'updated_at',
-        'deleted_at',
+        'deleted_at',        
     ];
 
 
@@ -96,6 +96,17 @@ class Patient extends Model
     public function foods() {
         return $this->belongsToMany('\App\Models\Food');
     }
-
+    
+    //Overriding laravel naming convention for pivot tables since we already have a pivot table with both food_id and patient_id
+    public function food_allergies()
+    {
+        return $this->belongsToMany('\App\Models\Food' , 'allergy_food_patient');
+    }
+    
+    //Overriding laravel naming convention for pivot tables since we already have a pivot table with both food_id and patient_id
+    public function medication_allergies()
+    {
+        return $this->belongsToMany('\App\Models\Medication' , 'allergy_medication_patient');
+    }
     
 }

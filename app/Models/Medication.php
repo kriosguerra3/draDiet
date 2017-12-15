@@ -50,11 +50,7 @@ class Medication extends Model
     public static $rules = [
         
     ];
-    
-    public function allergies()
-    {
-        return $this->morphMany('\App\Models\Allergy', 'allergiable');
-    }
+       
 
     
 }
