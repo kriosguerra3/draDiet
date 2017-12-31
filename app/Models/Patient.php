@@ -109,4 +109,8 @@ class Patient extends Model
         return $this->belongsToMany('\App\Models\Medication' , 'allergy_medication_patient');
     }
     
+    public function visits()
+    {
+        return $this->hasMany('App\Visit');
+    }
 }

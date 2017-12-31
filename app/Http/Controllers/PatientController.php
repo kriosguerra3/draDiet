@@ -17,6 +17,7 @@ use App\Models\Food;
 use App\Models\Illness;
 use App\Models\Habit;
 use App\Models\Medication;
+use App\Models\Assessment;
 
 
 class PatientController extends AppBaseController
@@ -58,9 +59,11 @@ class PatientController extends AppBaseController
         $habits= Habit::where('type', '=',NULL)->orderBy("name")->get();
         $exercises = Habit::where('type', '=','exercise')->orderBy("name")->get();  
         $foods = Food::orderBy("name")->get();
-        $medications = Medication::orderBy("name")->get();
+        $medications = Medication::orderBy("name")->get();        
+        $assessments = Assessment::orderBy("name")->get()->groupBy('parent');
+        //dd($assessments);
         
-        return view('patients.create',compact('general_illnesses','female_illnesses','habits','exercises','foods','medications'));
+        return view('patients.create',compact('general_illnesses','female_illnesses','habits','exercises','foods','medications','assessments'));
     }
 
     /**
