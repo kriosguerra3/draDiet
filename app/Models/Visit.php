@@ -70,5 +70,10 @@ class Visit extends Model
         return $this->belongsToMany('App\Models\Supplement');
     }
 
+    //sinhgular since its a 1:M relationship
+    public function patient()
+    {
+        return $this->belongsTo('App\Patient');
+    }        
     
 }

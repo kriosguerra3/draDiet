@@ -18,7 +18,8 @@ use App\Models\Illness;
 use App\Models\Habit;
 use App\Models\Medication;
 use App\Models\Assessment;
-
+use App\Models\Visit;
+use Auth;
 
 class PatientController extends AppBaseController
 {
@@ -51,8 +52,7 @@ class PatientController extends AppBaseController
      * @return Response
      */
     public function create()
-    {
-                
+    {                       
         //Mandamos todos los registros de hábitos, enfermedades, etc.              
         $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();
         $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
@@ -61,9 +61,9 @@ class PatientController extends AppBaseController
         $foods = Food::orderBy("name")->get();
         $medications = Medication::orderBy("name")->get();        
         $assessments = Assessment::orderBy("name")->get()->groupBy('parent');
-        //dd($assessments);
         
-        return view('patients.create',compact('general_illnesses','female_illnesses','habits','exercises','foods','medications','assessments'));
+        return view('patients.create',compact('general_illnesses','female_illnesses', 'habits','exercises','foods','medications','assessments'));
+    
     }
 
     /**
@@ -75,12 +75,14 @@ class PatientController extends AppBaseController
      */
     public function store(CreatePatientRequest $request)
     {        
+        //dd($request);
         //We separate the inputs to store them properly
         $input_patient = $request->except('illnesses','habits','food_allergies','medication_allergies');                
         $input_illnesses = $request->get('illnesses');
         $input_habits = $request->get('habits');
         $input_food_allergies= $request->get('food_allergies');
-        $input_medication_allergies= $request->get('medication_allergies');                       
+        $input_medication_allergies= $request->get('medication_allergies');
+        $input_assessments = $request->get('assessments');
         
         //Rewriting the birthdate into Carbon Format
         $input_patient['birthdate'] =  Carbon::createFromFormat('d/m/Y',  $input_patient['birthdate']);        
@@ -90,6 +92,16 @@ class PatientController extends AppBaseController
         $patient->habits()->sync($input_habits);
         $patient->food_allergies()->sync($input_food_allergies);
         $patient->medication_allergies()->sync($input_medication_allergies);
+        
+        //Saving the visit information. Since these are related models we can just use the save method
+        $visit = new Visit(['user_id'=>Auth::user()->id]);
+        $patient->visits()->save($visit);
+                
+        //Saving the values from the measured assessments. We use attach plus the additional column     
+        foreach($input_assessments as $assessment_id=>$value){
+            $visit->assessments()->attach($assessment_id,['value' => $value]);
+        }
+        
         
         Flash::success('Patient saved successfully.');
 
@@ -125,15 +137,15 @@ class PatientController extends AppBaseController
      * @return Response
      */
     public function edit($id)
-    {
-          
+    {          
         //Mandamos todos los registros de hábitos, enfermedades, etc.
         $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
         $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();        
         $habits = Habit::where('type', '=', NULL)->orderBy("name")->get();
         $exercises= Habit::where('type', '=','exercise')->orderBy("name")->get();
         $foods = Food::orderBy("name")->get(); 
-        $medications = Medication::orderBy("name")->get();        
+        $medications = Medication::orderBy("name")->get();
+        $assessments = Assessment::orderBy("name")->get()->groupBy('parent');
         
         $patient = $this->patientRepository->findWithoutFail($id);   
         
@@ -145,13 +157,26 @@ class PatientController extends AppBaseController
         $patient['foods'] = $patient->foods()->get();
         $patient['food_allergies'] = $patient->food_allergies()->get();
         $patient['medication_allergies'] = $patient->medication_allergies()->get();
+ 
+        //Getting the first visit id
+        $visit = $patient->visits()->first();
+        $assessments_visit_1 = $visit->assessments()->get();               
+         
+        //Arrnging the assessment values so we can send them to the form
+        foreach ($assessments_visit_1 as $assessment_visit_1_value) {
+            $first_visit_assessments[$assessment_visit_1_value->id] = $assessment_visit_1_value->pivot->value;
+            
+        }    
+        //$patient['assessments'] =  $first_visit_assessments;
+        //dd( $first_visit_assessments);
+       
         
         if (empty($patient)) {
             Flash::error('Patient not found');
             return redirect(route('patients.index'));
         }
 
-        return view('patients.edit', compact('patient','general_illnesses','female_illnesses','habits','exercises','foods','medications'));
+        return view('patients.edit', compact('patient','general_illnesses','female_illnesses','habits','exercises','foods','medications','assessments','first_visit_assessments'));
     }
 
     /**

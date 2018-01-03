@@ -46,7 +46,5 @@ class Assessment extends Model
      */
     public static $rules = [
         
-    ];
-
-    
+    ];    
 }

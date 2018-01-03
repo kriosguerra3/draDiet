@@ -2,6 +2,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css">	
 	<link rel="stylesheet" href="/bower/clockpicker/dist/bootstrap-clockpicker.min.css" />	
 @endsection 
+
 <div class="form-group col-md-12">    
     <h2>Datos Personales</h2>
     <div class=" box box-primary">
@@ -265,97 +266,8 @@
 			</div>
 		</div>
 	</div>	
-		
-	<div class="form-group col-md-12">
-    	<h2>Valoración</h2>
-    	<div class="box box-primary">		
-    		<div class="box-body">
-        		<div class="box-header with-border">
-        			<h3 class="box-title">Complexión física</h3>
-        		</div>
-        		<div class="box-body">   
-            		@foreach($assessments['complexion_fisica'] as $assessment)
-    				<div class="form-group col-sm-3">
-    				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
-    					@if (Route::currentRouteName() == "patients.edit" )
-    						{!! Form::text('assessments['.$assessment->id.'][]',null,array('class' => 'form-control','placeholder' => 'Centímetros'));!!}
-    					@else
-    						{!! Form::text('assessments['.$assessment->id.'][]',null,array('class' => 'form-control','placeholder' => 'Centímetros')); !!}
-    					@endif	
-    					
-    				</div>
-    				@endforeach
-    				<div class="form-group col-sm-2">
-    					{!! Form::label('altura', 'Complexión física') !!}
-						{!! Form::text('altura', null, ['class' => 'form-control','readonly' => 'true']) !!}
-        			</div>         		        		    
-        			      			
-        		</div>
-        		
-        		<div class="box-header with-border">
-        			<h3 class="box-title">Peso Ideal</h3>
-        		</div>
-        		<div class="box-body">   
-            		@foreach($assessments['peso'] as $assessment)
-    				<div class="form-group col-sm-4">
-    				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
-    					@if (Route::currentRouteName() == "patients.edit" )
-    						{!! Form::text('assessments['.$assessment->id.'][]',null,array('class' => 'form-control','placeholder' => 'Kilogramos'));!!}
-    					@else
-    						{!! Form::text('assessments['.$assessment->id.'][]',null,array('class' => 'form-control','placeholder' => 'Kilogramos')); !!}
-    					@endif	
-    					
-    				</div>
-    				@endforeach    				      			      			
-        		</div>
-        		<div class="box-header with-border">
-        			<h3 class="box-title">Porcentaje de Grasa Corporal</h3>
-        		</div>
-        		<div class="box-body">   
-            		@foreach($assessments['porcentaje_grasa_corporal'] as $assessment)
-    				<div class="form-group col-sm-4">
-    				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
-    					@if (Route::currentRouteName() == "patients.edit" )
-    						{!! Form::text('assessments['.$assessment->id.'][]',null,array('class' => 'form-control'));!!}
-    					@else
-    						{!! Form::text('assessments['.$assessment->id.'][]',null,array('class' => 'form-control')); !!}
-    					@endif	
-    					
-    				</div>
-    				@endforeach
-    				<div class="form-group col-sm-4">
-    					{!! Form::label('altura', '% Grasa Corporal') !!}
-						{!! Form::text('altura', null, ['class' => 'form-control','readonly' => 'true']) !!}
-        			</div>       			      			
-        		</div>        		
-        		<div class="box-header with-border">
-        			<h3 class="box-title">Signos</h3>
-        		</div>
-        		<div class="box-body">   
-            		@foreach($assessments['signos'] as $assessment)
-    				<div class="form-group col-sm-4">
-    				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
-    					@if (Route::currentRouteName() == "patients.edit" )
-    						{!! Form::text('assessments['.$assessment->id.'][]',null,array('class' => 'form-control'));!!}
-    					@else
-    						{!! Form::text('assessments['.$assessment->id.'][]',null,array('class' => 'form-control')); !!}
-    					@endif	
-    					
-    				</div>
-    				@endforeach    				  			      			
-        		</div>        		
-        		<div class="box-header with-border">
-					<h3 class="box-title">Otras indicaciones</h3>
-    			</div>
-    			<div class="box-body">        			
-                	<div class="form-group col-sm-12">
-                		{!! Form::text('indications', null, ['class' => 'form-control']) !!}
-                	</div>
-				</div>			
-			
-    		</div>
-    	</div>
-    </div>
+	
+	
 	
 
     <div class="form-group col-md-12">
@@ -377,6 +289,100 @@
         			</div>
         			@endforeach
         		</div>
+    		</div>
+    	</div>
+    </div>
+    
+    <div class="form-group col-md-12">
+    	<h2>Valoración</h2>
+    	<div class="box box-primary">		
+    		<div class="box-body">
+        		<div class="box-header with-border">
+        			<h3 class="box-title">Complexión física</h3>
+        		</div>
+        		<div class="box-body">   
+            		@foreach($assessments['complexion_fisica'] as $assessment)
+    				<div class="form-group col-sm-3">
+    				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
+    					@if (Route::currentRouteName() == "patients.edit" )
+    						{!! Form::text('assessments['.$assessment->id.']',$first_visit_assessments[$assessment->id],array('class' => 'form-control','placeholder' => 'Centímetros'));!!}
+    					@else
+    						{!! Form::text('assessments['.$assessment->id.']',null,array('class' => 'form-control','placeholder' => 'Centímetros')); !!}
+    					@endif	
+    					
+    				</div>
+    				@endforeach
+    				<div class="form-group col-sm-2">
+    					{!! Form::label('altura', 'Complexión física') !!}
+						{!! Form::text('altura', null, ['class' => 'form-control','readonly' => 'true']) !!}
+        			</div>         		        		    
+        			      			
+        		</div>
+        			
+        		<div class="box-header with-border">
+        			<h3 class="box-title">Peso Ideal</h3>
+        		</div>
+        		<div class="box-body">   
+            		@foreach($assessments['peso'] as $assessment)
+    				<div class="form-group col-sm-4">
+    				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
+    					@if (Route::currentRouteName() == "patients.edit" )
+    						{!! Form::text('assessments['.$assessment->id.']',$first_visit_assessments[$assessment->id],array('class' => 'form-control','placeholder' => 'Kilogramos'));!!}
+    					@else
+    						{!! Form::text('assessments['.$assessment->id.']',null,array('class' => 'form-control','placeholder' => 'Kilogramos')); !!}
+    					@endif	
+    					
+    				</div>
+    				@endforeach    				      			      			
+        		</div>
+        		
+        		<div class="box-header with-border">
+        			<h3 class="box-title">Porcentaje de Grasa Corporal</h3>
+        		</div>
+        		<div class="box-body">   
+            		@foreach($assessments['porcentaje_grasa_corporal'] as $assessment)
+    				<div class="form-group col-sm-4">
+    				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
+    					@if (Route::currentRouteName() == "patients.edit" )
+    						{!! Form::text('assessments['.$assessment->id.']',$first_visit_assessments[$assessment->id],array('class' => 'form-control'));!!}
+    					@else
+    						{!! Form::text('assessments['.$assessment->id.']',null,array('class' => 'form-control')); !!}
+    					@endif	
+    					
+    				</div>
+    				@endforeach
+    				<div class="form-group col-sm-4">
+    					{!! Form::label('altura', '% Grasa Corporal') !!}
+						{!! Form::text('altura', null, ['class' => 'form-control','readonly' => 'true']) !!}
+        			</div>       			      			
+        		</div> 
+        		       		
+        		<div class="box-header with-border">
+        			<h3 class="box-title">Signos</h3>
+        		</div>
+        		<div class="box-body">   
+            		@foreach($assessments['signos'] as $assessment)
+    				<div class="form-group col-sm-4">
+    				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
+    					@if (Route::currentRouteName() == "patients.edit" )
+    						{!! Form::text('assessments['.$assessment->id.']',$first_visit_assessments[$assessment->id],array('class' => 'form-control'));!!}
+    					@else
+    						{!! Form::text('assessments['.$assessment->id.']',null,array('class' => 'form-control')); !!}
+    					@endif	
+    					
+    				</div>
+    				@endforeach    				  			      			
+        		</div>   
+        		   		
+        		<div class="box-header with-border">
+					<h3 class="box-title">Otras indicaciones</h3>
+    			</div>
+    			<div class="box-body">        			
+                	<div class="form-group col-sm-12">
+                		{!! Form::text('indications', null, ['class' => 'form-control']) !!}
+                	</div>
+				</div>			
+			
     		</div>
     	</div>
     </div>
