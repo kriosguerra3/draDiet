@@ -1,6 +1,6 @@
 @section('css')
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css">	
-	<link rel="stylesheet" href="/bower/clockpicker/dist/bootstrap-clockpicker.min.css" />	
+	<link rel="stylesheet" href="{{ url('/') }}/bower/clockpicker/dist/bootstrap-clockpicker.min.css" />	
 @endsection 
 
 <div class="form-group col-md-12">    
@@ -44,7 +44,7 @@
                 </div>
             </div>
             
-            <!-- Email Field -->
+            <!-- phone Field -->
             <div class="form-group col-sm-6">
                 {!! Form::label('phone_number', 'Teléfono') !!}
                 {!! Form::text('phone_number', old('phone_number'), ['class' => 'form-control']) !!}
@@ -54,6 +54,12 @@
             <div class="form-group col-sm-6">
                 {!! Form::label('email', 'Correo electrónico') !!}
                 {!! Form::text('email', old('email'), ['class' => 'form-control']) !!}
+            </div>
+           
+             <!-- Age Field -->
+            <div class="form-group col-sm-6">
+                {!! Form::label('patient_age', 'Edad') !!}
+                {!! Form::text('patient_age',null, ['id'=>'patient_age','class' => 'form-control', 'readonly'  => 'true']) !!}
             </div>
         </div>
     </div>
@@ -261,7 +267,7 @@
                     {!! Form::label('past_medications', 'Ha tomado medicamentos para bajar de peso:') !!}                    
             	</div>
             	<div class="form-group col-sm-12">
-            		{!! Form::text('past_medications', null, ['class' => 'form-control']) !!}
+            		{!! Form::textarea('past_medications', null, ['class' => 'form-control','size' => '30x5']) !!}            		
             	</div>
 			</div>
 		</div>
@@ -305,16 +311,16 @@
     				<div class="form-group col-sm-3">
     				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
     					@if (Route::currentRouteName() == "patients.edit" )
-    						{!! Form::text('assessments['.$assessment->id.']',$first_visit_assessments[$assessment->id],array('class' => 'form-control','placeholder' => 'Centímetros'));!!}
+    						{!! Form::text('assessments['.$assessment->id.']',$patient['visit_assessments'][$assessment->id],array('id'=>'assessments['.$assessment->id.']','class' => 'form-control','placeholder' => 'Centímetros'));!!}
     					@else
-    						{!! Form::text('assessments['.$assessment->id.']',null,array('class' => 'form-control','placeholder' => 'Centímetros')); !!}
+    						{!! Form::text('assessments['.$assessment->id.']',null,array('id'=>'assessments['.$assessment->id.']','class' => 'form-control','placeholder' => 'Centímetros')); !!}
     					@endif	
     					
     				</div>
     				@endforeach
     				<div class="form-group col-sm-2">
-    					{!! Form::label('altura', 'Complexión física') !!}
-						{!! Form::text('altura', null, ['class' => 'form-control','readonly' => 'true']) !!}
+    					{!! Form::label('physical_complexion', 'Complexión física') !!}
+						{!! Form::text('physical_complexion', null, ['id'=> 'physical_complexion','class' => 'form-control','readonly' => 'true']) !!}
         			</div>         		        		    
         			      			
         		</div>
@@ -327,9 +333,9 @@
     				<div class="form-group col-sm-4">
     				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
     					@if (Route::currentRouteName() == "patients.edit" )
-    						{!! Form::text('assessments['.$assessment->id.']',$first_visit_assessments[$assessment->id],array('class' => 'form-control','placeholder' => 'Kilogramos'));!!}
+    						{!! Form::text('assessments['.$assessment->id.']',$patient['visit_assessments'][$assessment->id],array('id'=>'assessments['.$assessment->id.']','class' => 'form-control','placeholder' => 'Kilogramos'));!!}
     					@else
-    						{!! Form::text('assessments['.$assessment->id.']',null,array('class' => 'form-control','placeholder' => 'Kilogramos')); !!}
+    						{!! Form::text('assessments['.$assessment->id.']',null,array('id'=>'assessments['.$assessment->id.']','class' => 'form-control','placeholder' => 'Kilogramos')); !!}
     					@endif	
     					
     				</div>
@@ -344,16 +350,16 @@
     				<div class="form-group col-sm-4">
     				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
     					@if (Route::currentRouteName() == "patients.edit" )
-    						{!! Form::text('assessments['.$assessment->id.']',$first_visit_assessments[$assessment->id],array('class' => 'form-control'));!!}
+    						{!! Form::text('assessments['.$assessment->id.']',$patient['visit_assessments'][$assessment->id],array('id'=>'assessments['.$assessment->id.']','class' => 'form-control'));!!}
     					@else
-    						{!! Form::text('assessments['.$assessment->id.']',null,array('class' => 'form-control')); !!}
+    						{!! Form::text('assessments['.$assessment->id.']',null,array('id'=>'assessments['.$assessment->id.']','class' => 'form-control')); !!}
     					@endif	
     					
     				</div>
     				@endforeach
     				<div class="form-group col-sm-4">
-    					{!! Form::label('altura', '% Grasa Corporal') !!}
-						{!! Form::text('altura', null, ['class' => 'form-control','readonly' => 'true']) !!}
+    					{!! Form::label('body_fat', '% Grasa Corporal') !!}
+						{!! Form::text('body_fat', null, ['id'=>'body_fat','class' => 'form-control','readonly' => 'true']) !!}
         			</div>       			      			
         		</div> 
         		       		
@@ -365,9 +371,9 @@
     				<div class="form-group col-sm-4">
     				{!! Form::label('habits', $assessment->label ,array('class'=>'form-check-label')); !!}
     					@if (Route::currentRouteName() == "patients.edit" )
-    						{!! Form::text('assessments['.$assessment->id.']',$first_visit_assessments[$assessment->id],array('class' => 'form-control'));!!}
+    						{!! Form::text('assessments['.$assessment->id.']',$patient['visit_assessments'][$assessment->id],array('id'=>'assessments['.$assessment->id.']','class' => 'form-control'));!!}
     					@else
-    						{!! Form::text('assessments['.$assessment->id.']',null,array('class' => 'form-control')); !!}
+    						{!! Form::text('assessments['.$assessment->id.']',null,array('id'=>'assessments['.$assessment->id.']','class' => 'form-control')); !!}
     					@endif	
     					
     				</div>
@@ -379,7 +385,7 @@
     			</div>
     			<div class="box-body">        			
                 	<div class="form-group col-sm-12">
-                		{!! Form::text('indications', null, ['class' => 'form-control']) !!}
+                		{!! Form::textarea('indications', null, ['class' => 'form-control','size' => '30x5']) !!}
                 	</div>
 				</div>			
 			
@@ -396,12 +402,27 @@
     
 @section('views_scripts')
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-	<script type="text/javascript" src="/bower/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
+	<script type="text/javascript" src="{{ url('/') }}/bower/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
+	<script type="text/javascript" src="{{ url('/') }}/js/functions.js"></script>
 
-     <script type="text/javascript">
-    	
+     <script type="text/javascript">     
         $( document ).ready(function() { 
-        
+        	
+        	var patientAge = $('#patient_age').val();
+        	var patientGender =  $('input[name=gender]:checked').val();
+        	var skinfold = $("#assessments\\[9\\]").val();
+        	var height = $("#assessments\\[1\\]").val();			
+    		var wristCircumference = $("#assessments\\[6\\]").val();
+    		var gender = $('input[name=gender]:checked').val();
+            var birthdate = $('#birthdate').val();
+
+            $("#patient_age").val(getPatientAge(birthdate));
+
+			/* These functions are defined on public/js/functions.js */
+        	$("#physical_complexion").val(calculatePhysicalComplexion(height,wristCircumference,gender)); 
+        	$("#body_fat").val(calculateBodyFat(patientAge,patientGender,skinfold));
+        	
+        	
           	$('.clockpicker').clockpicker({
           		donetext:"Ingresar"
             });
@@ -417,7 +438,27 @@
     
         	$("#food_allergies_checkbox").click(function() {  
         		$("#foods_list_div").toggle('slow');	        
-    	    }); 
+    	    });         	
+
+        	//Listeners for the inputs when their values change
+        	
+        	//Calculating Physical Complexion when the values are being introduced.
+        	// Double \\are used to escape square brackets in the ids. The complete functions        	
+        	$("#assessments\\[1\\], #assessments\\[6\\], input[name=gender]:checked" ).keyup(function(){				
+				//calculatePhysicalComplexion(height,wristCircumference,gender);
+        		$("#physical_complexion").val(calculatePhysicalComplexion($("#assessments\\[1\\]").val(),$("#assessments\\[6\\]").val(),$('input[name=gender]:checked').val()));	
+        	});
+
+        	//Calculating Physical Complexion when the values are being introduced. Double \\are used to escape square brackets in the ids. The complete functions        	
+        	$("#birthdate").keyup(function(){				
+        		$("#patient_age").val(getPatientAge($("#birthdate").val()));       		
+        	});
+        	 
+        	$("#patient_age,input[name=gender]:checked,#assessments\\[9\\]").keyup(function(){
+        		//calculateBodyFat(patientAge,patientGender,skinfold)
+            	$("#body_fat").val(calculateBodyFat($('#patient_age').val(),$('input[name=gender]:checked').val(),$("#assessments\\[9\\]").val()));
+            });
+			
         	
         });
 	</script>    

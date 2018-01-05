@@ -53,7 +53,8 @@ class Patient extends Model
         'other_snacks',
         'takes_turns',
         'travels_frequently',
-        'indications'        
+        'indications',
+        'past_medications'
     ];
 
     /**
@@ -112,6 +113,11 @@ class Patient extends Model
     public function visits()
     {
         return $this->hasMany('\App\Models\Visit');
+    }
+    
+    public function visit_assessments($visit_array)
+    {
+        return $array;
     }
         
 }

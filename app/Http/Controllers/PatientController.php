@@ -156,27 +156,26 @@ class PatientController extends AppBaseController
         $patient['habits'] = $patient->habits()->get();
         $patient['foods'] = $patient->foods()->get();
         $patient['food_allergies'] = $patient->food_allergies()->get();
-        $patient['medication_allergies'] = $patient->medication_allergies()->get();
- 
+        $patient['medication_allergies'] = $patient->medication_allergies()->get();       
+
         //Getting the first visit id
         $visit = $patient->visits()->first();
-        $assessments_visit_1 = $visit->assessments()->get();               
-         
-        //Arrnging the assessment values so we can send them to the form
-        foreach ($assessments_visit_1 as $assessment_visit_1_value) {
-            $first_visit_assessments[$assessment_visit_1_value->id] = $assessment_visit_1_value->pivot->value;
-            
-        }    
-        //$patient['assessments'] =  $first_visit_assessments;
-        //dd( $first_visit_assessments);
-       
+        $assessments_first_visit = $visit->assessments()->get();
         
+        //Arranging the assessment values so we can send them to the form
+        foreach ($assessments_first_visit as $assessment_value) {
+            $first_visit_assessments[$assessment_value->id] = $assessment_value->pivot->value;
+            //Como almacenarlas después que necesitemos el valor de varias visitas:
+            //$first_visit_assessments[$visit->id][$assessment_value->id] = $assessment_value->pivot->value;
+        }
+        $patient['visit_assessments'] = $first_visit_assessments;
+       
         if (empty($patient)) {
             Flash::error('Patient not found');
             return redirect(route('patients.index'));
         }
-
-        return view('patients.edit', compact('patient','general_illnesses','female_illnesses','habits','exercises','foods','medications','assessments','first_visit_assessments'));
+        
+        return view('patients.edit', compact('patient','general_illnesses','female_illnesses','habits','exercises','foods','medications','assessments'));
     }
 
     /**
@@ -197,21 +196,20 @@ class PatientController extends AppBaseController
         }                
         
         //Rewriting the birthdate into Carbon Format
-        $request['birthdate'] =  Carbon::createFromFormat('d/m/Y', $request['birthdate']);  
-        
-       
-        //Rewriting the times intoMYSQL time format
-        /*
-        $request['schedule_wakes_up'] = date("G:i", strtotime($request['schedule_wakes_up']));
-        $request['schedule_breakfast'] = date("G:i", strtotime($request['schedule_breakfast']));
-        $request['schedule_snack_am'] = date("G:i", strtotime($request['schedule_snack_am']));
-        $request['schedule_lunch'] = date("G:i", strtotime($request['schedule_lunch']));
-        $request['schedule_snack_pm'] = date("G:i", strtotime($request['schedule_snack_pm']));
-        $request['schedule_dinner'] = date("G:i", strtotime($request['schedule_dinner']));
-        $request['schedule_sleeps'] = date("G:i", strtotime($request['schedule_sleeps']));
-        */
+        $request['birthdate'] =  Carbon::createFromFormat('d/m/Y', $request['birthdate']);                
         
         $patient = $this->patientRepository->update($request->all(), $id);
+        
+        
+        //Getting the first visit id
+        $visit = $patient->visits()->first();
+        
+        //Updating the values from the measured assessments. We use attach plus the additional column
+        foreach( $request['assessments'] as $assessment_id=>$value){
+            $visit->assessments()->updateExistingPivot($assessment_id,['value' => $value]);
+        }
+        
+        
         //Detaching illnesses in case there's none when updating        
         if($request->get('illnesses') === null){
             $patient->illnesses()->detach();            
@@ -236,6 +234,7 @@ class PatientController extends AppBaseController
         if($request->get('medication_allergies') === null){
             $patient->medication_allergies()->detach();
         } 
+        
         
         Flash::success('Patient updated successfully.');
         return redirect(route('patients.index'));
