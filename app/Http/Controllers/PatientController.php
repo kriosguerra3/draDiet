@@ -52,7 +52,7 @@ class PatientController extends AppBaseController
      * @return Response
      */
     public function create()
-    {                       
+    {
         //Mandamos todos los registros de hábitos, enfermedades, etc.              
         $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();
         $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
@@ -137,7 +137,7 @@ class PatientController extends AppBaseController
      * @return Response
      */
     public function edit($id)
-    {          
+    {                  
         //Mandamos todos los registros de hábitos, enfermedades, etc.
         $general_illnesses = Illness::orWhereNull('gender')->orderBy('name', 'asc')->get();
         $female_illnesses = Illness::where('gender', '=','female')->orderBy('name', 'asc')->get();        
