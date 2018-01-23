@@ -419,7 +419,7 @@
             var pathname = window.location.pathname; 
 
             //Only if we are editing the patient the age, complexion and body fat is calculated. We find the word "edit" in the url 
-			if(pathname,indexOf("edit") !== -1){
+			if(pathname.indexOf("edit") !== -1){
 				$("#patient_age").val(getPatientAge(birthdate));
 				/* These functions are defined on public/js/functions.js */
 	        	$("#physical_complexion").val(calculatePhysicalComplexion(height,wristCircumference,gender)); 
