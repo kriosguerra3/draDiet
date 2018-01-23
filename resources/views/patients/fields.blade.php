@@ -416,11 +416,15 @@
     		var gender = $('input[name=gender]:checked').val();
             var birthdate = $('#birthdate').val();
 
-            $("#patient_age").val(getPatientAge(birthdate));
+            var pathname = window.location.pathname; 
 
-			/* These functions are defined on public/js/functions.js */
-        	$("#physical_complexion").val(calculatePhysicalComplexion(height,wristCircumference,gender)); 
-        	$("#body_fat").val(calculateBodyFat(patientAge,patientGender,skinfold));
+            //Only if we are editing the patient the age, complexion and body fat is calculated 
+			if(pathname == "/patients/edit"){
+				$("#patient_age").val(getPatientAge(birthdate));
+				/* These functions are defined on public/js/functions.js */
+	        	$("#physical_complexion").val(calculatePhysicalComplexion(height,wristCircumference,gender)); 
+	        	$("#body_fat").val(calculateBodyFat(patientAge,patientGender,skinfold));
+			}            
         	
         	
           	$('.clockpicker').clockpicker({
