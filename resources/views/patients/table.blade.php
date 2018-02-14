@@ -1,24 +1,23 @@
 <table class="table table-responsive" id="patients-table">
     <thead>
         <tr>
-            <th>Name</th>
-        <th>Last Name</th>
-        <th>Gender</th>
-        <th>Birthdate</th>
-        <th>Phone Number</th>
-        <th>User Id</th>
+            <th>Nombre</th>
+        <th>Apellidos</th>
+        <th>Género</th>
+        <th>Fecha de Nacimiento</th>
+        <th>Teléfono</th>
             <th colspan="3">Action</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody>    
+   
     @foreach($patients as $patient)
         <tr>
             <td>{!! $patient->name !!}</td>
             <td>{!! $patient->last_name !!}</td>
-            <td>{!! $patient->gender !!}</td>
-            <td>{!! $patient->birthdate !!}</td>
+            <td> @lang('messages.genders.'.$patient->gender) </td>
+            <td><p>{!! \Carbon\Carbon::parse($patient->birthdate)->format('d/F/Y') !!}</p></td>
             <td>{!! $patient->phone_number !!}</td>
-            <td>{!! $patient->user_id !!}</td>
             <td>
                 {!! Form::open(['route' => ['patients.destroy', $patient->id], 'method' => 'delete']) !!}
                 <div class='btn-group'>
