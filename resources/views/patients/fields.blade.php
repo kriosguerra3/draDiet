@@ -5,7 +5,7 @@
 
 <div class="form-group col-md-12">    
     <h2>Datos Personales</h2>
-    <div class=" box box-primary">
+    <div class="box box-primary">
     	<div class="box-body">
             <!-- Name Field -->
             <div class="form-group col-sm-6">

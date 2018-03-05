@@ -17,10 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::resource('assessments', 'AssessmentAPIController');
-
-Route::resource('exercises', 'ExerciseAPIController');
 
 Route::resource('foods', 'FoodAPIController');
 
@@ -33,8 +30,6 @@ Route::resource('medications', 'MedicationAPIController');
 Route::resource('patients', 'PatientAPIController');
 
 Route::resource('roles', 'RoleAPIController');
-
-Route::resource('schedules', 'ScheduleAPIController');
 
 Route::resource('supplements', 'SupplementAPIController');
 

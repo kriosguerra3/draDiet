@@ -22,8 +22,6 @@ Route::get('/home', 'HomeController@index');
 
 Route::resource('assessments', 'AssessmentController');
 
-Route::resource('exercises', 'ExerciseController');
-
 //Food catalog in Json format
 //Route::get('foods/catalog',array('as'=>'catalog','uses'=>'FoodController@catalog'));
 
@@ -39,8 +37,6 @@ Route::resource('patients', 'PatientController');
 
 Route::resource('roles', 'RoleController');
 
-Route::resource('schedules', 'ScheduleController');
-
 Route::resource('supplements', 'SupplementController');
 
 Route::resource('visits', 'VisitController');
@@ -50,6 +46,8 @@ Route::resource('malaises', 'MalaiseController');
 Route::resource('recommendations', 'RecommendationController');
 
 Route::resource('tests', 'TestController');
+
+Route::resource('relationships', 'RelationshipController');
 
 
 
